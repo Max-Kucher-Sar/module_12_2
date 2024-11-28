@@ -4,12 +4,14 @@ import unittest
 class TournamentTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.all_result = {}
+        cls.all_result = []
 
     @classmethod
     def tearDownClass(cls):
-        formatted_result = {place: name for place, name in cls.all_result.items()}
-        print(formatted_result)
+        count = 1
+        for dict_ in cls.all_result:
+            print(dict_)
+
 
 
     def setUp(self):
@@ -21,10 +23,21 @@ class TournamentTest(unittest.TestCase):
 
     def test_run1(self):
         championship1 = program_12_2.Tournament(90, self.runner1, self.runner3)
-        result = championship1.start()
-        for key, value in result.items():
-            self.all_result[key] = value
-        self.assertEqual(result[2], 'Andry')
+        result1 = championship1.start()
+        self.all_result.append({place: name for place, name in result1.items()})
+        self.assertTrue(result1[2] == 'Nick')
+
+    def test_run2(self):
+        championship2 = program_12_2.Tournament(90, self.runner2, self.runner3)
+        result2 = championship2.start()
+        self.all_result.append({place: name for place, name in result2.items()})
+        self.assertTrue(result2[2] == 'Nick')
+
+    def test_run3(self):
+        championship3 = program_12_2.Tournament(90, self.runner1, self.runner2, self.runner3)
+        result3 = championship3.start()
+        self.all_result.append({place: name for place, name in result3.items()})
+        self.assertTrue(result3[3] == 'Nick')
 
 
 

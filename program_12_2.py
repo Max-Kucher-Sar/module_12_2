@@ -13,6 +13,9 @@ class Runner:
     def __str__(self):
         return self.name
 
+    def __repr__(self):
+        return self.name
+
     def __eq__(self, other):
         if isinstance(other, str):
             return self.name == other
@@ -32,8 +35,27 @@ class Tournament:
             for participant in self.participants:
                 participant.run()
                 if participant.distance >= self.full_distance:
-                    finishers[place] = participant
+                    finishers[place] = participant.distance, participant
                     place += 1
                     self.participants.remove(participant)
 
-        return finishers
+        """
+        С помощью пузырьковой сортировки исправляем логику кода.
+        Теперь бегун с меньшей скоростью, и соотвественно меньшей дистанцией никогда
+        не займет место выше тех, кто действительно пробежал быстрее.
+        """
+
+        final_result = list(finishers.values())
+        for i in range(len(final_result)):
+            for j in range(len(final_result) - i - 1):
+                if final_result[j][0] < final_result[j + 1][0]:
+                    final_result[j], final_result[j + 1] = final_result[j + 1], final_result[j]
+
+        result = {}
+        place = 1
+        for distance, name in final_result:
+            result[place] = name
+            place += 1
+
+
+        return result
